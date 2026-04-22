@@ -80,8 +80,10 @@ function SophiaWhisper({ text }) {
       className="whisper-enter relative p-4 pl-5 rounded-md bg-gradient-to-r from-sage-500/[0.08] via-sage-500/[0.03] to-transparent border border-sage-500/20 border-l-[3px] border-l-sage-400"
     >
       <div className="flex items-center gap-2 mb-1.5">
-        <div className="w-4 h-4 rounded-full bg-gradient-to-br from-sage-300 via-sage-500 to-sage-700 relative overflow-hidden shrink-0">
-          <div className="absolute inset-0" style={{background:"conic-gradient(from 120deg, rgba(255,255,255,0.3), transparent 40%, rgba(214,162,74,0.3) 60%, transparent)"}}/>
+        <div className="w-6 h-6 rounded-full relative overflow-hidden shrink-0" style={{
+          background: "radial-gradient(circle at 29% 38%, #c6e3df 0%, #add5d0 27%, transparent 62%), radial-gradient(circle at 79% 33%, #f3bdd7 0%, #e6a9c8 25%, transparent 58%), radial-gradient(circle at 67% 79%, #d7efb8 0%, #c6e89d 22%, transparent 50%), radial-gradient(circle at 47% 20%, #f2dcab 0%, #ead09d 22%, transparent 50%), linear-gradient(145deg, #dbe8e4 0%, #edf2ee 100%)"
+        }}>
+          <div className="absolute inset-0" style={{background:"radial-gradient(circle at 36% 28%, rgba(255,255,255,0.32), transparent 42%)"}}/>
         </div>
         <span className="text-[10px] tracking-[0.24em] text-sage-300 font-semibold">SOPHIA · TODAY'S READ</span>
         <span className="w-1 h-1 rounded-full bg-ink-500/60"/>
@@ -164,33 +166,24 @@ function TopBar({ onToggleTheme, theme }) {
   const nav = ["SOPHIA", "CULTURE HEALTH", "CALENDAR", "STUDIO"];
   const [active, setActive] = React.useState("SOPHIA");
   return (
-    <div className="relative h-14 px-6 flex items-center gap-6 border-b border-white/[0.04]">
-      {/* Wordmark */}
+    <div className="top-nav relative h-14 px-6 flex items-center gap-6 border-b border-white/[0.04]">
+      {/* Wordmark (replaced by uploaded logo) */}
       <div className="flex items-center gap-2 shrink-0 min-w-0">
-        <div className="relative h-8 w-[88px] shrink-0">
-          <div className="absolute inset-0 rounded-full border border-white/32 shadow-[0_8px_20px_-14px_rgba(0,0,0,0.7)]" style={{
-            background: "radial-gradient(circle at 29% 38%, #c6e3df 0%, #add5d0 27%, transparent 62%), radial-gradient(circle at 79% 33%, #f3bdd7 0%, #e6a9c8 25%, transparent 58%), radial-gradient(circle at 67% 79%, #d7efb8 0%, #c6e89d 22%, transparent 50%), radial-gradient(circle at 47% 20%, #f2dcab 0%, #ead09d 22%, transparent 50%), linear-gradient(145deg, #dbe8e4 0%, #edf2ee 100%)"
-          }} />
-          <span className={`absolute inset-0 flex items-center justify-center font-sans font-extrabold text-[13px] leading-none tracking-[-0.045em] ${theme === "light" ? "text-black" : "text-white"} drop-shadow-[0_1px_1px_rgba(35,42,37,0.2)]`}>
-            <span className="relative inline-block">
-              sophia
-              <span
-                aria-hidden="true"
-                className="absolute"
-                style={{
-                  right: 2.2,
-                  top: -3,
-                  width: 7,
-                  height: 2.2,
-                  background: theme === "light" ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.98)",
-                  transform: "rotate(-30deg)",
-                  borderRadius: 999,
-                  clipPath: "polygon(0 50%, 100% 0, 82% 100%)"
-                }}
-              />
-            </span>
-          </span>
-        </div>
+        {(() => {
+          const [logoSpin, setLogoSpin] = React.useState(false);
+          return (
+            <img
+              src="uploads/Innersystems+Logo+(1).webp"
+              alt="Innersystems Logo"
+              className={`h-8 object-contain top-logo ${logoSpin ? 'spin' : ''} cursor-pointer`}
+              onClick={() => setLogoSpin(true)}
+              onAnimationEnd={() => setLogoSpin(false)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setLogoSpin(true); } }}
+            />
+          );
+        })()}
         <span className="hidden lg:inline text-[9px] tracking-[0.22em] text-ink-500 font-mono ml-1 mt-0.5">COMMAND CENTER</span>
       </div>
 
@@ -199,13 +192,11 @@ function TopBar({ onToggleTheme, theme }) {
         {nav.map(n => (
           <button key={n}
             onClick={() => setActive(n)}
+            data-active={active === n}
+            aria-current={active === n ? 'page' : undefined}
             className={`relative text-[11px] tracking-[0.22em] whitespace-nowrap transition
               ${active === n ? "text-ink-50" : "text-ink-500 hover:text-ink-300"}`}>
             {n}
-            <span
-              aria-hidden="true"
-              className={`absolute -bottom-[18px] left-0 right-0 h-px bg-sage-400 transition-opacity ${active === n ? "opacity-100" : "opacity-0"}`}
-            />
           </button>
         ))}
       </nav>

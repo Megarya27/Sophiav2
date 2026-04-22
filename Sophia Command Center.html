@@ -154,6 +154,214 @@
     mix-blend-mode: overlay;
   }
 
+  /* Glass panel (layered elevation) */
+  .glass-panel {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(4,8,6,0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+
+  html.light .glass-panel {
+    background: rgba(255,255,255,0.92) !important;
+    border: 1px solid rgba(16,24,20,0.06) !important;
+    box-shadow: 0 8px 20px rgba(16,24,20,0.06) !important;
+  }
+
+  /* Sophia orb accent gradient (used for subtle AI action highlights) */
+  :root { --sophia-gradient: linear-gradient(90deg, #c6e3df 0%, #add5d0 27%, #f3bdd7 45%, #e6a9c8 65%, #d7efb8 100%); }
+
+  /* Input bar generating state — faint gradient border + glow */
+  .input-shell.generating {
+    border: 1px solid transparent;
+    border-image-source: var(--sophia-gradient);
+    border-image-slice: 1;
+    border-image-width: 1;
+    box-shadow: 0 10px 30px rgba(74,124,89,0.06), 0 2px 8px rgba(243,189,215,0.03);
+    background-clip: padding-box;
+  }
+
+  /* Accent button used for actions tied to the AI (subtle gradient on hover) */
+  .orb-accent-btn { transition: background .22s ease, box-shadow .22s ease, color .18s; }
+  .orb-accent-btn:hover {
+    background: var(--sophia-gradient) !important;
+    color: #0B100D !important;
+    box-shadow: 0 10px 30px rgba(74,124,89,0.10);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 640px) {
+    .glass-panel { padding-left: 12px !important; padding-right: 12px !important; padding-top: 12px !important; padding-bottom: 12px !important; border-radius: 8px; }
+    .topo-bg { background-position: 10% 0%; }
+    .nice-scroll { -webkit-overflow-scrolling: touch; }
+  }
+
+  /* Make the uploaded logo appear black in light mode */
+  html.light .top-logo {
+    filter: grayscale(1) brightness(0) !important;
+    opacity: 1 !important;
+    transition: filter .18s ease, opacity .18s ease;
+  }
+
+  /* Hover/active effect for clickable Sophia orb */
+  .clickable-orb {
+    transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease;
+    will-change: transform, box-shadow;
+  }
+  .clickable-orb:hover {
+    transform: scale(1.03);
+  }
+  .clickable-orb:active {
+    transform: scale(0.985);
+  }
+  .clickable-orb:hover .breathe-inner {
+    transform: scale(1.04);
+    box-shadow: 0 18px 42px rgba(74,124,89,0.12);
+  }
+
+  /* Logo spin animation when clicked */
+  .top-logo { display: inline-block; transform-origin: 50% 50%; }
+  .top-logo.spin { animation: logo-spin 0.72s cubic-bezier(.2,.9,.2,1); }
+  @keyframes logo-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Sophia orb 'alive' animations: float, inner pulse, and shimmer */
+  @keyframes sophia-float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+  }
+  @keyframes sophia-inner-pulse {
+    0% { transform: scale(1); opacity: 0.95; }
+    50% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.95; }
+  }
+  @keyframes sophia-shimmer {
+    0% { opacity: 0; transform: translateX(-30%); }
+    50% { opacity: 0.18; transform: translateX(30%); }
+    100% { opacity: 0; transform: translateX(130%); }
+  }
+
+  .sophia-alive { animation: sophia-float 6s ease-in-out infinite; }
+  .sophia-core { transition: box-shadow .36s ease; }
+  .sophia-core { animation: sophia-inner-pulse 5.6s ease-in-out infinite; }
+  .sophia-shimmer {
+    position: absolute; inset: 0; mix-blend-mode: overlay; pointer-events: none;
+    background: linear-gradient(90deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.28) 45%, rgba(255,255,255,0.0) 70%);
+    transform: translateX(-30%);
+    opacity: 0;
+    border-radius: inherit;
+    animation: sophia-shimmer 3.8s ease-in-out infinite;
+  }
+  /* Gentle glow on hover for clickable orb */
+  .clickable-orb:hover .sophia-core { box-shadow: 0 22px 48px rgba(74,124,89,0.10); }
+
+  /* Ensure the 'Begin a new conversation' button stays high-contrast in light mode */
+  html.light .history-drawer .begin-conv-btn {
+    background: rgba(47,95,58,0.12) !important;
+    border-color: rgba(22,33,27,0.12) !important;
+    color: #0f1612 !important;
+  }
+  html.light .history-drawer .begin-conv-btn:hover {
+    background: rgba(47,95,58,0.16) !important;
+  }
+
+  /* Make drawer top edges more distinct and prevent top from appearing cut off */
+  .history-drawer, .intelligence-drawer {
+    position: absolute;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: visible;
+    /* stronger frosted glass */
+    backdrop-filter: blur(18px) saturate(130%) contrast(105%);
+    -webkit-backdrop-filter: blur(18px) saturate(130%) contrast(105%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,255,255,0.26));
+    border-top: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 -18px 44px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+    background-clip: padding-box;
+  }
+
+  /* Dark-mode variant: deeper, cooler glass with stronger separation */
+  html:not(.light) .history-drawer, html:not(.light) .intelligence-drawer {
+    background: linear-gradient(180deg, rgba(8,12,10,0.72), rgba(8,12,10,0.48));
+    border-top: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 -20px 48px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+
+  /* Light-mode override: brighter, more airy glass */
+  html.light .history-drawer, html.light .intelligence-drawer {
+    background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.34)) !important;
+    border-top-color: rgba(22,33,27,0.08) !important;
+    box-shadow: 0 -12px 32px rgba(16,24,20,0.08) !important;
+  }
+
+  /* Translucent navbar (floating top) */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(16px) saturate(110%);
+    -webkit-backdrop-filter: blur(16px) saturate(110%);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 6px 24px rgba(16,24,20,0.06);
+    transition: box-shadow .22s ease, backdrop-filter .18s ease;
+    /* soften edges when over gradients */
+    background-clip: padding-box;
+  }
+
+  /* Dark-mode navbar variant */
+  html:not(.light) .top-nav {
+    background: rgba(18,24,20,0.56);
+    backdrop-filter: blur(16px) saturate(95%);
+    -webkit-backdrop-filter: blur(16px) saturate(95%);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 6px 28px rgba(0,0,0,0.5);
+  }
+
+  /* scrolled state: add a soft shadow to separate from content */
+  .top-nav.scrolled {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03), 0 1px 0 rgba(0,0,0,0.02);
+  }
+  html:not(.light) .top-nav.scrolled {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18), 0 1px 0 rgba(255,255,255,0.02);
+  }
+
+  /* Sliding underline for top-nav buttons */
+  .top-nav nav button {
+    position: relative;
+    padding-bottom: 10px;
+  }
+  .top-nav nav button::after {
+    content: '';
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    bottom: 6px;
+    height: 2px;
+    background: linear-gradient(90deg, #7FA687, #D6A24A);
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 0.22s cubic-bezier(.2,.9,.2,1), opacity 0.18s;
+    opacity: 0;
+  }
+  .top-nav nav button:hover::after,
+  .top-nav nav button[data-active="true"]::after {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  /* Slightly bolder underline when active to signal current page */
+  .top-nav nav button[data-active="true"]::after {
+    height: 3px;
+    left: 8%;
+    right: 8%;
+  }
+
   /* Scrollbar */
   .nice-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
   .nice-scroll::-webkit-scrollbar-track { background: transparent; }
@@ -299,5 +507,30 @@
   <script type="text/babel" src="src/drawers.jsx"></script>
   <script type="text/babel" src="src/tweaks.jsx"></script>
   <script type="text/babel" src="src/app.jsx"></script>
+  <script>
+    // Toggle `.scrolled` on the sticky top-nav to show a subtle shadow
+    (function(){
+      function initNavScroll() {
+        var nav = document.querySelector('.top-nav');
+        if (!nav) return;
+        var ticking = false;
+        function onScroll(){
+          if (!ticking) {
+            window.requestAnimationFrame(function(){
+              if (window.scrollY > 6) nav.classList.add('scrolled');
+              else nav.classList.remove('scrolled');
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }
+        document.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('load', onScroll);
+        // also run once after DOM ready
+        document.addEventListener('DOMContentLoaded', onScroll);
+      }
+      try { initNavScroll(); } catch (e) { /* graceful fallback */ }
+    })();
+  </script>
 </body>
 </html>

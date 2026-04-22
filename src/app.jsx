@@ -17,6 +17,7 @@ function App() {
   const [userTurns, setUserTurns] = React.useState([]);
   const [tweaksOpen, setTweaksOpen] = React.useState(false);
   const [tweaks, setTweaks] = React.useState(window.SOPHIA_TWEAKS);
+  const [generating, setGenerating] = React.useState(false);
 
   // Persist goal & theme
   React.useEffect(() => { localStorage.setItem("sophia.goal", goal); }, [goal]);
@@ -54,6 +55,7 @@ function App() {
   const submit = () => {
     if (!draft.trim()) return;
     setUserTurns(u => [...u, { id: "u"+Date.now(), text: draft.trim() }]);
+    setGenerating(true);
     const reply = SOPHIA_REPLIES[Math.floor(Math.random() * SOPHIA_REPLIES.length)];
     setTimeout(() => {
       // Add new insight card into the pulse canvas
@@ -70,6 +72,7 @@ function App() {
       };
       setPulse(p => [newCard, ...p]);
       setWhisper(reply);
+      setGenerating(false);
     }, 500);
     setDraft("");
   };
@@ -118,7 +121,7 @@ function App() {
             paddingLeft: leftOpen ? 360 : 36,
             paddingRight: rightOpen ? 420 : 36,
           }}>
-          <div className={`max-w-[960px] mx-auto py-8 px-8 ${densityClass}`}>
+          <div className={`max-w-[960px] mx-auto py-8 px-8 ${densityClass} glass-panel`}>
 
             {/* Input + chips */}
             <section>
@@ -126,6 +129,7 @@ function App() {
                 value={draft}
                 onChange={setDraft}
                 onSubmit={submit}
+                generating={generating}
                 placeholder="Ask Sophia, or describe what you're navigating…"
               />
               <div className="mt-3 flex flex-wrap gap-2">
@@ -137,9 +141,14 @@ function App() {
             </section>
 
             {/* EXECUTIVE HEADER — orb + goal + at-a-glance KPIs */}
-            <section className="grid grid-cols-[auto_1fr_auto] gap-8 items-start pb-1">
+            <section className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] gap-8 items-start pb-1">
               <div className="pt-1">
-                <SophiaCircle size={104} style={tweaks.circleStyle} theme={theme}/>
+                <SophiaCircle
+                  size={104}
+                  style={tweaks.circleStyle}
+                  theme={theme}
+                  onClick={() => { setLeftOpen(true); setRightOpen(true); }}
+                />
               </div>
               <div className="pt-2 min-w-0">
                 <GoalCard

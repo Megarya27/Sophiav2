@@ -5,7 +5,7 @@ function EdgeHandle({ side = "left", label, onClick, open }) {
   return (
     <button
       onClick={onClick}
-      className={`edge-handle group absolute top-0 bottom-0 ${side === "left" ? "left-0" : "right-0"}
+      className={`edge-handle hidden sm:block group absolute top-0 bottom-0 ${side === "left" ? "left-0" : "right-0"}
         w-[28px] hover:w-[36px] bg-transparent hover:bg-white/[0.025] z-20 transition-all`}
       aria-label={label}
     >
@@ -43,7 +43,7 @@ function HistoryDrawer({ open, onClose }) {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -360, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 30 }}
-            className="history-drawer absolute top-14 bottom-0 left-0 w-[340px] z-30 bg-ink-900/90 backdrop-blur-xl border-r border-white/[0.06] nice-scroll overflow-y-auto"
+            className="history-drawer absolute top-14 bottom-0 left-0 w-full sm:w-[340px] z-50 bg-ink-900/90 backdrop-blur-xl border-r border-white/[0.06] nice-scroll overflow-y-auto"
           >
             <div className="p-5">
             <div className="flex items-center justify-between">
@@ -53,16 +53,24 @@ function HistoryDrawer({ open, onClose }) {
               </div>
             </div>
 
-            <button className="mt-4 w-full flex items-center gap-2 px-3 py-2.5 rounded-md bg-sage-500/15 hover:bg-sage-500/25 border border-sage-500/30 text-sage-200 text-[12.5px] transition">
+            <button className="mt-4 w-full flex items-center gap-2 px-3 py-2.5 rounded-md bg-sage-500/25 hover:bg-sage-500/35 border border-sage-500/30 text-ink-50 font-semibold text-[12.5px] transition begin-conv-btn">
               <IconPlus size={13}/>
               <span>Begin a new conversation</span>
             </button>
 
             <div className="mt-5 relative">
-              <input
-                placeholder="Search transcripts, decisions, people…"
-                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-md px-3 py-2 text-[12.5px] text-ink-50 placeholder:text-ink-500 outline-none focus:border-sage-500/50 transition"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-ink-300">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
+                    <circle cx="11" cy="11" r="7" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </div>
+                <input
+                  placeholder="Search transcripts, decisions, people…"
+                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-md pl-10 pr-3 py-2 text-[12.5px] text-ink-50 placeholder:text-ink-500 outline-none focus:border-sage-500/50 transition"
+                />
+              </div>
             </div>
 
             <div className="mt-6 space-y-6">
@@ -140,7 +148,7 @@ function IntelligencePanel({ open, onClose, decisions, onAddDecision, commitment
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 420, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 30 }}
-            className="intelligence-drawer absolute top-14 bottom-0 right-0 w-[400px] z-30 bg-ink-900/90 backdrop-blur-xl border-l border-white/[0.06] nice-scroll overflow-y-auto"
+            className="intelligence-drawer absolute top-14 bottom-0 right-0 w-full sm:w-[400px] z-50 bg-ink-900/90 backdrop-blur-xl border-l border-white/[0.06] nice-scroll overflow-y-auto"
           >
             <div className="p-5 pb-16">
             <div className="flex items-center justify-between">

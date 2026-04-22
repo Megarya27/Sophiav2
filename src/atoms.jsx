@@ -4,9 +4,16 @@
 // ──────────────────────────────────────────────────────────
 // Sophia Circle — colorful brand orb + wordmark
 // ──────────────────────────────────────────────────────────
-function SophiaCircle({ size = 128, style = "aurora", theme = "dark" }) {
+function SophiaCircle({ size = 128, style = "aurora", theme = "dark", onClick }) {
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size + 74, height: size + 74 }}>
+    <div
+      className={`relative flex items-center justify-center sophia-alive ${onClick ? 'cursor-pointer clickable-orb' : ''}`}
+      style={{ width: size + 74, height: size + 74 }}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
+    >
       {/* soft outer bloom */}
       <div
         className="absolute rounded-full breathe pointer-events-none"
@@ -28,7 +35,7 @@ function SophiaCircle({ size = 128, style = "aurora", theme = "dark" }) {
 
       {/* colorful core */}
       <div
-        className="relative rounded-full breathe-inner overflow-hidden"
+        className="relative rounded-full breathe-inner overflow-hidden sophia-core"
         style={{
           width: size, height: size,
           background: "radial-gradient(circle at 29% 38%, #c6e3df 0%, #add5d0 27%, transparent 62%), radial-gradient(circle at 79% 33%, #f3bdd7 0%, #e6a9c8 25%, transparent 58%), radial-gradient(circle at 67% 79%, #d7efb8 0%, #c6e89d 22%, transparent 50%), radial-gradient(circle at 47% 20%, #f2dcab 0%, #ead09d 22%, transparent 50%), linear-gradient(145deg, #dbe8e4 0%, #edf2ee 100%)",
@@ -38,6 +45,7 @@ function SophiaCircle({ size = 128, style = "aurora", theme = "dark" }) {
         <div className="absolute inset-0" style={{
           background: "radial-gradient(circle at 36% 28%, rgba(255,255,255,0.40), transparent 42%)"
         }}/>
+        <div className="absolute inset-0 pointer-events-none sophia-shimmer" />
         <div
           className="absolute inset-0 flex items-center justify-center font-sans font-extrabold tracking-tight"
             style={{
@@ -152,7 +160,7 @@ function BlockerCard() {
           15-min sync with Mikey & Speaker 2 today · est. unblocks 2 downstream tasks
         </div>
         <div className="mt-3 flex items-center gap-2">
-          <button className="px-3 py-1.5 rounded-md bg-amber-400 hover:bg-amber-500 text-ink-900 text-[11.5px] font-medium tracking-wide transition">
+          <button className="px-3 py-1.5 rounded-md bg-amber-400 hover:bg-amber-500 text-ink-900 text-[11.5px] font-medium tracking-wide transition orb-accent-btn">
             Schedule sync
           </button>
           <button className="px-3 py-1.5 rounded-md bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-ink-300 text-[11.5px] tracking-wide transition">
@@ -178,11 +186,11 @@ function BlockerCard() {
 // ──────────────────────────────────────────────────────────
 // Input pill with focus gradient
 // ──────────────────────────────────────────────────────────
-function InputBar({ value, onChange, onSubmit, placeholder = "What's on your mind?" }) {
+function InputBar({ value, onChange, onSubmit, placeholder = "What's on your mind?", generating = false }) {
   const [focused, setFocused] = React.useState(false);
   const ref = React.useRef();
   return (
-    <div className={`input-shell ${focused ? "focused" : ""} px-5 py-3 flex items-center gap-3`} style={{minHeight: 56}}>
+    <div className={`input-shell ${focused ? "focused" : ""} ${generating ? "generating" : ""} px-5 py-3 flex items-center gap-3`} style={{minHeight: 56}}>
       <IconSparkle size={16} className="text-sage-300 shrink-0"/>
       <input
         ref={ref}
@@ -236,8 +244,8 @@ function GrowthConstellation({ data }) {
     return { ...d, x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r, angle };
   });
   return (
-    <div className="relative" style={{width: size, height: size}}>
-      <svg width={size} height={size} overflow="visible" style={{overflow: 'visible'}}>
+    <div className="relative" style={{width: '100%', maxWidth: size, height: 'auto'}}>
+      <svg viewBox={`0 0 ${size} ${size}`} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" overflow="visible" style={{overflow: 'visible'}}>
         {/* rings */}
         {[0.33, 0.66, 1].map((t, i) => (
           <circle key={i} cx={cx} cy={cy} r={rInner + (rOuter-rInner)*t}
