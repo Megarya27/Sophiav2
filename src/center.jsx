@@ -171,7 +171,7 @@ function TopBar({ onToggleTheme, theme }) {
           <div className="absolute inset-0 rounded-full border border-white/32 shadow-[0_8px_20px_-14px_rgba(0,0,0,0.7)]" style={{
             background: "radial-gradient(circle at 29% 38%, #c6e3df 0%, #add5d0 27%, transparent 62%), radial-gradient(circle at 79% 33%, #f3bdd7 0%, #e6a9c8 25%, transparent 58%), radial-gradient(circle at 67% 79%, #d7efb8 0%, #c6e89d 22%, transparent 50%), radial-gradient(circle at 47% 20%, #f2dcab 0%, #ead09d 22%, transparent 50%), linear-gradient(145deg, #dbe8e4 0%, #edf2ee 100%)"
           }} />
-          <span className="absolute inset-0 flex items-center justify-center font-sans font-extrabold text-[13px] leading-none tracking-[-0.045em] text-white drop-shadow-[0_1px_1px_rgba(35,42,37,0.2)]">
+          <span className={`absolute inset-0 flex items-center justify-center font-sans font-extrabold text-[13px] leading-none tracking-[-0.045em] ${theme === "light" ? "text-black" : "text-white"} drop-shadow-[0_1px_1px_rgba(35,42,37,0.2)]`}>
             <span className="relative inline-block">
               sophia
               <span
@@ -182,7 +182,7 @@ function TopBar({ onToggleTheme, theme }) {
                   top: -3,
                   width: 7,
                   height: 2.2,
-                  background: "rgba(255,255,255,0.98)",
+                  background: theme === "light" ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.98)",
                   transform: "rotate(-30deg)",
                   borderRadius: 999,
                   clipPath: "polygon(0 50%, 100% 0, 82% 100%)"

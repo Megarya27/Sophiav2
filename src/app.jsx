@@ -89,7 +89,7 @@ function App() {
   const densityClass = tweaks.density === "compact" ? "space-y-6" : "space-y-10";
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden">
+    <div className="relative h-screen w-screen overflow-visible">
       <TopBar theme={theme} onToggleTheme={() => setTheme(t => t === "dark" ? "light" : "dark")}/>
 
       {/* Main stage */}
@@ -139,7 +139,7 @@ function App() {
             {/* EXECUTIVE HEADER — orb + goal + at-a-glance KPIs */}
             <section className="grid grid-cols-[auto_1fr_auto] gap-8 items-start pb-1">
               <div className="pt-1">
-                <SophiaCircle size={104} style={tweaks.circleStyle}/>
+                <SophiaCircle size={104} style={tweaks.circleStyle} theme={theme}/>
               </div>
               <div className="pt-2 min-w-0">
                 <GoalCard

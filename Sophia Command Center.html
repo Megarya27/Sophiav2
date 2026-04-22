@@ -63,6 +63,9 @@
   html.light .text-ink-500 { color: #3f473f !important; }
   html.light .text-sage-300 { color: #2f5f3a !important; }
 
+  /* Ensure explicit white text utilities remain readable in light mode */
+  html.light .text-white { color: #0B100D !important; }
+
   html.light .hover\:text-ink-50:hover,
   html.light .hover\:text-ink-300:hover {
     color: #101511 !important;
@@ -258,7 +261,7 @@
   ::selection { background: rgba(74,124,89,0.35); color: inherit; }
 </style>
 </head>
-<body class="topo-bg grain relative overflow-hidden">
+<body class="topo-bg grain relative overflow-visible">
   <div id="root"></div>
 
   <!-- Tweak defaults (editable) -->

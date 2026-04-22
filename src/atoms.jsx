@@ -4,7 +4,7 @@
 // ──────────────────────────────────────────────────────────
 // Sophia Circle — colorful brand orb + wordmark
 // ──────────────────────────────────────────────────────────
-function SophiaCircle({ size = 128, style = "aurora" }) {
+function SophiaCircle({ size = 128, style = "aurora", theme = "dark" }) {
   return (
     <div className="relative flex items-center justify-center" style={{ width: size + 74, height: size + 74 }}>
       {/* soft outer bloom */}
@@ -40,12 +40,12 @@ function SophiaCircle({ size = 128, style = "aurora" }) {
         }}/>
         <div
           className="absolute inset-0 flex items-center justify-center font-sans font-extrabold tracking-tight"
-          style={{
-            color: "rgba(255,255,255,0.98)",
-            fontSize: Math.max(18, size * 0.24),
-            letterSpacing: "-0.045em",
-            textShadow: "0 1px 1px rgba(35,42,37,0.20)"
-          }}
+            style={{
+              color: theme === "light" ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.98)",
+              fontSize: Math.max(18, size * 0.24),
+              letterSpacing: "-0.045em",
+              textShadow: "0 1px 1px rgba(35,42,37,0.20)"
+            }}
         >
           <span className="relative inline-block">
             sophia
@@ -57,7 +57,7 @@ function SophiaCircle({ size = 128, style = "aurora" }) {
                 top: size * -0.06,
                 width: size * 0.076,
                 height: size * 0.028,
-                background: "rgba(255,255,255,0.98)",
+                background: theme === "light" ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.98)",
                 transform: "rotate(-30deg)",
                 borderRadius: 999,
                 clipPath: "polygon(0 50%, 100% 0, 82% 100%)"
@@ -237,7 +237,7 @@ function GrowthConstellation({ data }) {
   });
   return (
     <div className="relative" style={{width: size, height: size}}>
-      <svg width={size} height={size}>
+      <svg width={size} height={size} overflow="visible" style={{overflow: 'visible'}}>
         {/* rings */}
         {[0.33, 0.66, 1].map((t, i) => (
           <circle key={i} cx={cx} cy={cy} r={rInner + (rOuter-rInner)*t}
