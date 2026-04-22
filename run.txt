@@ -1,0 +1,2 @@
+terminal command: npx --yes http-server . -p 5500 -c-1
+
