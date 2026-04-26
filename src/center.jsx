@@ -162,9 +162,9 @@ function MeetingRow() {
 // ──────────────────────────────────────────────────────────
 // Top bar — floating nav
 // ──────────────────────────────────────────────────────────
-function TopBar({ onToggleTheme, theme }) {
-  const nav = ["SOPHIA", "CULTURE HEALTH", "CALENDAR", "STUDIO"];
-  const [active, setActive] = React.useState("SOPHIA");
+function TopBar({ onToggleTheme, theme, page, onNavigate }) {
+  const nav = ["Home", "Coach SOPHIA", "Studio"];
+  const active = page || "Home";
   return (
     <div className="top-nav relative h-14 px-6 flex items-center gap-6 border-b border-white/[0.04]">
       {/* Wordmark (replaced by uploaded logo) */}
@@ -191,7 +191,7 @@ function TopBar({ onToggleTheme, theme }) {
       <nav className="flex-1 flex items-center justify-center gap-5 xl:gap-7 min-w-0 overflow-hidden">
         {nav.map(n => (
           <button key={n}
-            onClick={() => setActive(n)}
+            onClick={() => onNavigate && onNavigate(n)}
             data-active={active === n}
             aria-current={active === n ? 'page' : undefined}
             className={`relative text-[11px] tracking-[0.22em] whitespace-nowrap transition

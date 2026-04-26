@@ -102,14 +102,15 @@ const SEED_PRACTICES = [
     blurb: "Connect decisions to future outcomes and team growth. Help people understand the why." },
 ];
 
-// Growth dimensions — radial cluster
+// Growth dimensions — radial cluster (ordered for Motivation graphs)
 const SEED_GROWTH = [
-  { id: "g1", label: "Ownership", value: 27 },
-  { id: "g2", label: "Future",    value: 36 },
-  { id: "g3", label: "Presence",  value: 22 },
-  { id: "g4", label: "Curiosity", value: 31 },
-  { id: "g5", label: "Candor",    value: 18 },
-  { id: "g6", label: "Clarity",   value: 29 },
+  { id: "g1", label: "Achievement", value: 27 },
+  { id: "g2", label: "Influence",   value: 22 },
+  { id: "g3", label: "Connection",  value: 18 },
+  { id: "g4", label: "Autonomy",    value: 36 },
+  { id: "g5", label: "Recognition", value: 29 },
+  { id: "g6", label: "Purpose",     value: 31 },
+  { id: "g7", label: "Growth",      value: 27 },
 ];
 
 const SEED_PULSE_SIGNAL = {
