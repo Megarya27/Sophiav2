@@ -753,25 +753,26 @@ function App() {
 
               {/* CHECK LATEST INSIGHT Notification */}
               <section>
-                <div className={`relative`} style={{borderRadius:14, padding:18, border: theme === 'dark' ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.06)', background: theme === 'dark' ? 'linear-gradient(90deg, rgba(127,166,135,0.02), rgba(0,0,0,0.12))' : 'linear-gradient(90deg, rgba(74,124,89,0.02), rgba(255,255,255,0.6))', boxShadow: theme === 'dark' ? '0 10px 30px rgba(0,0,0,0.6), inset 0 -40px 60px rgba(74,124,89,0.02)' : '0 8px 20px rgba(0,0,0,0.06)'}}>
+                <div className={`relative`} style={{borderRadius:14, padding:20, border: theme === 'dark' ? '1px solid rgba(22,101,52,0.18)' : '1px solid rgba(22,101,52,0.12)', background: theme === 'dark' ? 'linear-gradient(90deg, rgba(22,101,52,0.16), rgba(6,10,8,0.12))' : 'linear-gradient(90deg, rgba(209,250,229,0.7), rgba(255,255,255,0.9))', boxShadow: theme === 'dark' ? '0 18px 40px rgba(0,0,0,0.7), inset 0 -40px 60px rgba(22,101,52,0.06)' : '0 12px 30px rgba(0,0,0,0.06)'}}>
+                  <div style={{position:'absolute', left:10, top:12, bottom:12, width:6, borderRadius:4, background: theme === 'dark' ? 'linear-gradient(180deg,#1f7a4a,#114e2d)' : 'linear-gradient(180deg,#166534,#0b5a33)'}}/>
                   <button aria-label="dismiss insight" onClick={() => setWhisper('')} className="absolute top-3 right-3 text-ink-300 hover:text-ink-50">✕</button>
 
                   <div className="flex items-start gap-4">
                     <div style={{minWidth:56}}>
-                      <div style={{width:48,height:48,borderRadius:9999,display:'flex',alignItems:'center',justifyContent:'center',background: theme === 'dark' ? 'rgba(127,166,135,0.12)' : 'rgba(74,124,89,0.12)'}}>
+                      <div style={{width:52,height:52,borderRadius:9999,display:'flex',alignItems:'center',justifyContent:'center',background: theme === 'dark' ? 'linear-gradient(180deg,#166534,#1f7a4a)' : '#166534', boxShadow: theme === 'dark' ? '0 6px 18px rgba(0,0,0,0.6)' : '0 4px 10px rgba(0,0,0,0.08)'}}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                          <path d="M15 17H9" stroke={theme === 'dark' ? '#ffffff' : '#ffffff'} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M12 5v6" stroke={theme === 'dark' ? '#ffffff' : '#ffffff'} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M20 12a8 8 0 1 0-16 0c0 2.5 1.2 4.7 3.1 6.1L9 21h6l1.9-2.9A7.9 7.9 0 0 0 20 12z" stroke={theme === 'dark' ? '#ffffff' : '#ffffff'} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                          <path d="M15 17H9" stroke="#D1FAE5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M12 5v6" stroke="#D1FAE5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M20 12a8 8 0 1 0-16 0c0 2.5 1.2 4.7 3.1 6.1L9 21h6l1.9-2.9A7.9 7.9 0 0 0 20 12z" stroke="#D1FAE5" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
                         </svg>
                       </div>
                     </div>
 
                     <div className="flex-1">
                       <div className="flex items-center gap-3">
-                        <div className="section-title" style={{color: 'var(--accent-light)'}}>CHECK LATEST INSIGHT</div>
+                        <div className="section-title" style={{color: theme === 'dark' ? '#D1FAE5' : '#0b5a33', fontWeight:700, letterSpacing:'0.08em'}}>CHECK LATEST INSIGHT</div>
                       </div>
-                      <p className="mt-4" style={{color: theme === 'dark' ? '#E6F7EB' : '#1f2937', fontSize:15, lineHeight:1.6}}>{whisper}</p>
+                      <p className="mt-4" style={{color: theme === 'dark' ? '#E8FFEF' : '#0f172a', fontSize:15, lineHeight:1.6, fontWeight:500}}>{whisper}</p>
                     </div>
                   </div>
                 </div>
@@ -908,34 +909,29 @@ function App() {
                                     <div key={m.id} className="calendar-meeting" style={{display:'flex',gap:12,alignItems:'flex-start',padding:14,borderRadius:12,background: theme === 'dark' ? 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))' : '#ffffff', border: theme === 'dark' ? '1px solid rgba(255,255,255,0.03)' : '1px solid rgba(0,0,0,0.04)', boxShadow: theme === 'dark' ? '0 6px 18px rgba(0,0,0,0.6)' : '0 2px 12px rgba(0,0,0,0.04)', transition: 'transform 160ms ease, box-shadow 160ms ease'}}
                                       onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
                                       onClick={(e) => {
-                                        const row = e.currentTarget;
-                                        const sel = 'img[data-meeting-id="' + m.id + '"]';
-                                        const img = row.querySelector(sel);
-                                        if (img) {
-                                          const r = img.getBoundingClientRect();
-                                          const menuW = 200;
-                                          const gap = 8;
-                                          const left = Math.max(8 + window.scrollX, Math.min(window.scrollX + window.innerWidth - menuW - 8, r.left + window.scrollX - menuW - gap));
-                                          const top = r.top + window.scrollY + r.height / 2;
-                                          setRecordMenuPos({ left, top });
-                                          setOpenRecordFor(openRecordFor === m.id ? null : m.id);
-                                        } else {
-                                          const left = Math.max(8 + window.scrollX, Math.min(window.scrollX + window.innerWidth - 200 - 8, e.clientX + window.scrollX - 100));
-                                          const top = e.clientY + window.scrollY;
-                                          setRecordMenuPos({ left, top });
-                                          setOpenRecordFor(openRecordFor === m.id ? null : m.id);
-                                        }
+                                        const menuW = 200;
+                                        const gap = 8;
+                                        const clickX = e.clientX;
+                                        const clickY = e.clientY;
+                                        const left = clickX < window.innerWidth / 2
+                                          ? Math.min(window.scrollX + clickX + gap, window.scrollX + window.innerWidth - menuW - 8)
+                                          : Math.max(window.scrollX + clickX - menuW - gap, 8 + window.scrollX);
+                                        const top = window.scrollY + clickY;
+                                        setRecordMenuPos({ left, top });
+                                        setOpenRecordFor(openRecordFor === m.id ? null : m.id);
                                       }}>
                                         <div style={{minWidth:96, textAlign:'left', display:'flex', alignItems:'center', gap:10}}>
                                           <div data-meeting-id={m.id} style={{position:'relative', display:'flex', alignItems:'center', gap:10}}>
                                             <img src="uploads/Innersystems_sohiamark_transparent.webp" alt="logo" data-meeting-id={m.id} onClick={(e) => {
                                               e.stopPropagation();
-                                              const el = e.currentTarget;
-                                              const r = el.getBoundingClientRect();
                                               const menuW = 200;
                                               const gap = 8;
-                                              const left = Math.max(8 + window.scrollX, Math.min(window.scrollX + window.innerWidth - menuW - 8, r.left + window.scrollX - menuW - gap));
-                                              const top = r.top + window.scrollY + r.height / 2;
+                                              const clickX = e.clientX;
+                                              const clickY = e.clientY;
+                                              const left = clickX < window.innerWidth / 2
+                                                ? Math.min(window.scrollX + clickX + gap, window.scrollX + window.innerWidth - menuW - 8)
+                                                : Math.max(window.scrollX + clickX - menuW - gap, 8 + window.scrollX);
+                                              const top = window.scrollY + clickY;
                                               setRecordMenuPos({ left, top });
                                               setOpenRecordFor(openRecordFor === m.id ? null : m.id);
                                             }} style={{width:36,height:36,borderRadius:999,objectFit:'cover',boxShadow: theme === 'dark' ? '0 6px 18px rgba(0,0,0,0.6)' : '0 4px 12px rgba(0,0,0,0.08)', cursor: 'pointer'}}/>
@@ -1067,13 +1063,19 @@ function App() {
                     <div className={theme === 'dark' ? 'rounded-md p-4 bg-white/[0.02] border border-white/[0.04] h-full min-h-[460px] flex flex-col' : 'rounded-md p-4 bg-white border border-gray-200 h-full min-h-[460px] flex flex-col'}>
                         <div className="space-y-3 flex-1 overflow-auto">
                           {SEED_PULSE_SIGNAL.participants.map(p => (
-                            <div key={p.id} className={`flex items-center justify-between p-3 rounded-md border ${selectedMember && selectedMember.id === p.id ? 'border-sage-400 bg-sage-500/[0.04]' : 'border-white/[0.03] bg-transparent'}`}>
+                            <div key={p.id}
+                              onClick={() => setSelectedMember(p)}
+                              role="button"
+                              tabIndex={0}
+                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setSelectedMember(p); } }}
+                              className={`flex items-center justify-between p-3 rounded-md border ${selectedMember && selectedMember.id === p.id ? 'border-sage-400 bg-sage-500/[0.04]' : 'border-white/[0.03] bg-transparent'} hover:cursor-pointer hover:bg-white/[0.02]`}
+                            >
                               <div>
                                 <div className="font-medium text-ink-50">{p.name}</div>
                                 <div className="text-[12px] text-ink-500"><span className="num">{p.score}</span> · <span className="capitalize">{p.trend}</span></div>
                               </div>
                               <div className="flex items-center gap-2">
-                                <button aria-label={`View ${p.name} profile`} onClick={() => setSelectedMember(p)} className="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center text-ink-300 hover:bg-white/[0.05]">
+                                <button aria-label={`View ${p.name} profile`} onClick={(e) => { e.stopPropagation(); setSelectedMember(p); }} className="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center text-ink-300 hover:bg-white/[0.05]">
                                   <span className="sr-only">View</span>
                                   <span aria-hidden>›</span>
                                 </button>
