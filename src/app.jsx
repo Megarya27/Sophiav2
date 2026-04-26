@@ -1010,9 +1010,63 @@ function App() {
               </div>
             </div>
           ) : page === 'Coach SOPHIA' ? (
-            <div className="max-w-[1140px] mx-auto py-16 px-8">
-              <h1 className="text-3xl font-semibold text-ink-50 mb-4">Coach SOPHIA</h1>
-              <p className="text-ink-300">This is the Coach SOPHIA page — a focused workspace for coaching interactions and guided prompts. Replace this with the coaching UI when ready.</p>
+            <div className="max-w-[1140px] mx-auto py-12 px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main column */}
+                <div className="lg:col-span-2 flex flex-col items-center">
+                  <div className="mt-6">
+                    <SophiaCircle size={260} theme={theme} />
+                  </div>
+                  <div className="mt-6 text-center max-w-[780px]">
+                    <h2 className="text-[20px] font-semibold text-ink-50">Let's get clarity on something.</h2>
+                    <p className="mt-3 text-ink-300 max-w-[64ch] mx-auto">Tell Sophia what's on your mind and she'll help you reframe, prioritize, and prepare next steps. Use the quick prompts below to get started.</p>
+                  </div>
+
+                  <div className="w-full max-w-[860px] mt-8">
+                    <div className={theme === 'dark' ? 'rounded-lg p-6 bg-white/[0.02] border border-white/[0.04]' : 'rounded-lg p-6 bg-white border border-gray-200'}>
+                      <textarea
+                        value={draft}
+                        onChange={e => setDraft(e.target.value)}
+                        placeholder={"What's on your mind?"}
+                        className="w-full min-h-[120px] resize-none bg-transparent outline-none text-[15px] text-ink-50 placeholder:text-ink-500/80 p-4 rounded-md"
+                      />
+
+                      <div className="mt-4 flex items-center justify-between">
+                        <div className="flex gap-3 flex-wrap">
+                          {SEED_CHIPS.map((c, i) => (
+                            <Chip key={i} label={c.label} icon={c.icon} onClick={() => setDraft(prev => (prev ? prev + ' ' : '') + c.label)} />
+                          ))}
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button onClick={() => { setDraft(''); setWhisper(''); }} className="px-3 py-2 rounded-md bg-transparent hover:bg-white/[0.02] border border-white/[0.04] text-ink-300">Clear</button>
+                          <button onClick={() => { if (draft.trim()) submit(); }} className="px-4 py-2 rounded-md bg-[#166534] hover:bg-[#14502b] text-white">Ask Sophia</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right sidebar: Intentions */}
+                <aside className="lg:col-span-1">
+                  <div className={theme === 'dark' ? 'rounded-lg p-4 bg-white/[0.02] border border-white/[0.04] sticky top-20' : 'rounded-lg p-4 bg-white border border-gray-200 sticky top-20'}>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-[12px] tracking-[0.22em] text-ink-50 font-semibold">INTENTIONS</div>
+                      <button className="text-sm text-ink-300 hover:text-ink-50">Change</button>
+                    </div>
+                    <div className="space-y-3">
+                      {["Slow the proposal beat","Make recognition visible","Return to parked threads"].map((t, i) => (
+                        <div key={i} className="p-3 rounded-md bg-white/[0.01] border border-white/[0.03]">
+                          <div className="text-sm text-ink-50 font-medium">{t}</div>
+                          <div className="text-[12px] text-ink-400 mt-1">{i===0? 'One more breath before suggesting a solution.' : i===1 ? 'Specific, named appreciation for Sara and Priya.' : 'Revisit before closing the meeting.'}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4">
+                      <button onClick={() => setPage('Home')} className="w-full px-3 py-2 rounded-md bg-transparent hover:bg-white/[0.02] border border-white/[0.04] text-ink-300">Back</button>
+                    </div>
+                  </div>
+                </aside>
+              </div>
             </div>
           ) : (
             <div className="max-w-[1140px] mx-auto py-16 px-8">
