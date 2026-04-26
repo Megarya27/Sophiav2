@@ -211,6 +211,21 @@ function App() {
     setDraft("");
   };
 
+  // Close record menu on outside click
+  React.useEffect(() => {
+    const onDocClick = (e) => {
+      if (!openRecordFor) return;
+      const menu = recordMenuRef.current;
+      const target = e.target;
+      if (menu && menu.contains(target)) return;
+      const attr = target.closest && target.closest('[data-meeting-id]');
+      if (attr && attr.getAttribute && attr.getAttribute('data-meeting-id') === openRecordFor) return;
+      setOpenRecordFor(null);
+    };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, [openRecordFor]);
+
   const captureDecision = (item) => {
     const d = {
       id: "d"+Date.now(),
@@ -228,6 +243,29 @@ function App() {
   const [calendarView, setCalendarView] = React.useState('week'); // 'month' | 'week' | 'year'
   const [selectedMember, setSelectedMember] = React.useState(null);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [openRecordFor, setOpenRecordFor] = React.useState(null);
+  const recordMenuRef = React.useRef(null);
+  const [recordMenuPos, setRecordMenuPos] = React.useState(null);
+
+  // Close the floating record menu when the user scrolls, resizes, or interacts to avoid stale positioning
+  React.useEffect(() => {
+    const handleCloseOnScroll = () => {
+      if (openRecordFor !== null) {
+        setOpenRecordFor(null);
+        setRecordMenuPos(null);
+      }
+    };
+    window.addEventListener('scroll', handleCloseOnScroll, { passive: true });
+    window.addEventListener('wheel', handleCloseOnScroll, { passive: true });
+    window.addEventListener('touchstart', handleCloseOnScroll, { passive: true });
+    window.addEventListener('resize', handleCloseOnScroll);
+    return () => {
+      window.removeEventListener('scroll', handleCloseOnScroll);
+      window.removeEventListener('wheel', handleCloseOnScroll);
+      window.removeEventListener('touchstart', handleCloseOnScroll);
+      window.removeEventListener('resize', handleCloseOnScroll);
+    };
+  }, [openRecordFor]);
 
   // Calendar navigation helpers
   const goToPrevMonth = () => setSelectedDate(d => {
@@ -868,10 +906,54 @@ function App() {
                                 ) : (
                                   dayMeetings.map(m => (
                                     <div key={m.id} className="calendar-meeting" style={{display:'flex',gap:12,alignItems:'flex-start',padding:14,borderRadius:12,background: theme === 'dark' ? 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))' : '#ffffff', border: theme === 'dark' ? '1px solid rgba(255,255,255,0.03)' : '1px solid rgba(0,0,0,0.04)', boxShadow: theme === 'dark' ? '0 6px 18px rgba(0,0,0,0.6)' : '0 2px 12px rgba(0,0,0,0.04)', transition: 'transform 160ms ease, box-shadow 160ms ease'}}
-                                      onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-                                      <div style={{minWidth:96, textAlign:'left'}}>
-                                        <div style={{fontFamily:'ui-monospace, SFMono-Regular, Menlo, Monaco, monospace', fontSize:12, color: theme === 'dark' ? '#A7C9AD' : '#6B7280'}}>{m.time}</div>
-                                      </div>
+                                      onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+                                      onClick={(e) => {
+                                        const row = e.currentTarget;
+                                        const sel = 'img[data-meeting-id="' + m.id + '"]';
+                                        const img = row.querySelector(sel);
+                                        if (img) {
+                                          const r = img.getBoundingClientRect();
+                                          const menuW = 200;
+                                          const gap = 8;
+                                          const left = Math.max(8 + window.scrollX, Math.min(window.scrollX + window.innerWidth - menuW - 8, r.left + window.scrollX - menuW - gap));
+                                          const top = r.top + window.scrollY + r.height / 2;
+                                          setRecordMenuPos({ left, top });
+                                          setOpenRecordFor(openRecordFor === m.id ? null : m.id);
+                                        } else {
+                                          const left = Math.max(8 + window.scrollX, Math.min(window.scrollX + window.innerWidth - 200 - 8, e.clientX + window.scrollX - 100));
+                                          const top = e.clientY + window.scrollY;
+                                          setRecordMenuPos({ left, top });
+                                          setOpenRecordFor(openRecordFor === m.id ? null : m.id);
+                                        }
+                                      }}>
+                                        <div style={{minWidth:96, textAlign:'left', display:'flex', alignItems:'center', gap:10}}>
+                                          <div data-meeting-id={m.id} style={{position:'relative', display:'flex', alignItems:'center', gap:10}}>
+                                            <img src="uploads/Innersystems_sohiamark_transparent.webp" alt="logo" data-meeting-id={m.id} onClick={(e) => {
+                                              e.stopPropagation();
+                                              const el = e.currentTarget;
+                                              const r = el.getBoundingClientRect();
+                                              const menuW = 200;
+                                              const gap = 8;
+                                              const left = Math.max(8 + window.scrollX, Math.min(window.scrollX + window.innerWidth - menuW - 8, r.left + window.scrollX - menuW - gap));
+                                              const top = r.top + window.scrollY + r.height / 2;
+                                              setRecordMenuPos({ left, top });
+                                              setOpenRecordFor(openRecordFor === m.id ? null : m.id);
+                                            }} style={{width:36,height:36,borderRadius:999,objectFit:'cover',boxShadow: theme === 'dark' ? '0 6px 18px rgba(0,0,0,0.6)' : '0 4px 12px rgba(0,0,0,0.08)', cursor: 'pointer'}}/>
+                                            {openRecordFor === m.id && recordMenuPos && ReactDOM.createPortal(
+                                              <motion.div ref={recordMenuRef} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.2 }} style={{position:'absolute', left: recordMenuPos.left, top: recordMenuPos.top, transform: 'translateY(-50%)', zIndex: 999999}}>
+                                                <div style={{minWidth:200, borderRadius:12, padding:'8px 10px', boxShadow: theme === 'dark' ? '0 8px 28px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.08)', background: theme === 'dark' ? 'rgba(12,16,13,0.92)' : '#fff', border: theme === 'dark' ? '1px solid rgba(255,255,255,0.02)' : '1px solid rgba(0,0,0,0.06)', display:'flex', alignItems:'center', gap:10}}>
+                                                  <button onClick={() => { setOpenRecordFor(null); setWhisper("Recording with Sophia..."); }} style={{display:'flex',alignItems:'center',gap:8,background:'transparent',border:'none',cursor:'pointer',padding:6}}>
+                                                    <IconMic size={14} className="text-sage-300"/>
+                                                    <span style={{fontSize:13,fontWeight:600,color: theme === 'dark' ? '#E6F7EB' : '#0b0b0b'}}>Record with Sophia</span>
+                                                  </button>
+                                                </div>
+                                              </motion.div>, document.body)
+                                            }
+                                          </div>
+                                          <div>
+                                            <div style={{fontFamily:'ui-monospace, SFMono-Regular, Menlo, Monaco, monospace', fontSize:12, color: theme === 'dark' ? '#A7C9AD' : '#6B7280'}}>{m.time}</div>
+                                          </div>
+                                        </div>
                                       <div style={{flex:1}}>
                                         <div style={{fontSize:15,fontWeight:600,color: theme === 'dark' ? '#E6F7EB' : '#111827'}}>{m.title}</div>
                                         <div style={{marginTop:6,display:'flex',alignItems:'center',gap:8,color: theme === 'dark' ? '#9CAFB3' : '#6B7280',fontSize:13,lineHeight:1.5}}>
